@@ -50,11 +50,16 @@ func (h *hk) Unregister() {
 }
 
 var keys = []*hk{
-	// general editing
+	// general edit
+	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyA}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_A},
+	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyB}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_B},
+	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyI}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_I},
+	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyX}, modifier: []hotkey.Modifier{hotkey.ModCmd, hotkey.ModShift}, key: keybd_event.VK_X},
+
+	// general copy-pasta
 	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyX}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_X, appSkip: []string{"kitty"}},
 	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyC}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_C, appSkip: []string{"kitty"}},
 	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyV}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_V, appSkip: []string{"kitty"}},
-	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyA}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_A, appSkip: []string{"kitty"}},
 
 	// browser tabs
 	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyR}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_R},
