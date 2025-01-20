@@ -24,16 +24,15 @@ type combo struct {
 }
 
 type hk struct {
-	hk       *hotkey.Hotkey
-	combo    combo
-	modifier []hotkey.Modifier
-	key      int
-	appSkip  []string
+	hk        *hotkey.Hotkey
+	listenKey combo
+	sendKey   combo
+	appSkip   []string
 }
 
 func (h *hk) Register() {
 	if h.hk == nil {
-		h.hk = hotkey.New(h.combo.modifier, h.combo.key)
+		h.hk = hotkey.New(h.listenKey.modifier, h.listenKey.key)
 	}
 	if err := h.hk.Register(); err != nil {
 		panic(err)
@@ -42,7 +41,7 @@ func (h *hk) Register() {
 
 func (h *hk) Handle() {
 	for range h.hk.Keydown() {
-		sendKey(h.combo, h.modifier, h.key, h.appSkip...)
+		sendKey(h.listenKey, h.sendKey, h.appSkip...)
 	}
 }
 func (h *hk) Unregister() {
@@ -51,24 +50,24 @@ func (h *hk) Unregister() {
 
 var keys = []*hk{
 	// general edit
-	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyA}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_A},
-	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyB}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_B},
-	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyI}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_I},
-	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyX}, modifier: []hotkey.Modifier{hotkey.ModCmd, hotkey.ModShift}, key: keybd_event.VK_X},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyA}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_A}},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyB}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_B}},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyI}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_I}},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyX}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd, hotkey.ModShift}, keybd_event.VK_X}},
 
 	// general copy-pasta
-	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyX}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_X, appSkip: []string{"kitty"}},
-	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyC}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_C, appSkip: []string{"kitty"}},
-	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyV}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_V, appSkip: []string{"kitty"}},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyX}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_X}, appSkip: []string{"kitty"}},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyC}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_C}, appSkip: []string{"kitty"}},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyV}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_V}, appSkip: []string{"kitty"}},
 
 	// browser tabs
-	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyR}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_R},
-	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyT}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_T},
-	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyT}, modifier: []hotkey.Modifier{hotkey.ModCmd, hotkey.ModShift}, key: keybd_event.VK_T},
-	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyW}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_W},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyR}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_R}},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyT}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_T}},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyT}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd, hotkey.ModShift}, keybd_event.VK_T}},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyW}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_W}},
 
 	// slack switch channel/dm window
-	{combo: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyK}, modifier: []hotkey.Modifier{hotkey.ModCmd}, key: keybd_event.VK_K},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyK}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_K}},
 }
 
 func fn() {
@@ -89,7 +88,7 @@ func fn() {
 	log.Println("Handlers unregistered. Bye!")
 }
 
-func sendKey(c combo, modifiers []hotkey.Modifier, key int, appSkip ...string) {
+func sendKey(listen combo, send combo, appSkip ...string) {
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 
@@ -99,8 +98,8 @@ func sendKey(c combo, modifiers []hotkey.Modifier, key int, appSkip ...string) {
 
 		for _, appName := range appSkip {
 			if app.LocalizedName() == appName {
-				modifiers = c.modifier
-				key = int(c.key)
+				send.modifier = listen.modifier
+				send.key = listen.key
 				break
 			}
 		}
@@ -111,8 +110,8 @@ func sendKey(c combo, modifiers []hotkey.Modifier, key int, appSkip ...string) {
 		log.Printf("failed creating key bonding: %w", err)
 	}
 
-	kb.SetKeys(key)
-	for _, m := range modifiers {
+	kb.SetKeys(int(send.key))
+	for _, m := range send.modifier {
 		switch m {
 		case hotkey.ModCmd:
 			kb.HasSuper(true)
