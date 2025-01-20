@@ -54,6 +54,7 @@ var keys = []*hk{
 	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyB}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_B}},
 	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyI}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_I}},
 	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyX}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd, hotkey.ModShift}, keybd_event.VK_X}},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyZ}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_Z}},
 
 	// general copy-pasta
 	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyX}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_X}, appSkip: []string{"kitty"}},
