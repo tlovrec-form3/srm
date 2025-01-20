@@ -61,10 +61,10 @@ var keys = []*hk{
 	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyV}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_V}, appSkip: []string{"kitty"}},
 
 	// browser tabs
-	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyR}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_R}},
-	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyT}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_T}},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyR}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_R}, appSkip: []string{"kitty"}},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyT}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_T}, appSkip: []string{"kitty"}},
 	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyT}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd, hotkey.ModShift}, keybd_event.VK_T}},
-	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyW}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_W}},
+	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyW}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_W}, appSkip: []string{"kitty"}},
 
 	// slack switch channel/dm window
 	{listenKey: combo{[]hotkey.Modifier{hotkey.ModCtrl}, hotkey.KeyK}, sendKey: combo{[]hotkey.Modifier{hotkey.ModCmd}, keybd_event.VK_K}},
