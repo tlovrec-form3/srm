@@ -7,9 +7,9 @@ import (
 	"runtime"
 	"syscall"
 
-	"github.com/micmonay/keybd_event"
 	"github.com/progrium/darwinkit/macos/appkit"
 	"github.com/progrium/darwinkit/objc"
+	"github.com/tlovrec-form3/keybd_event"
 	"golang.design/x/hotkey"
 	"golang.design/x/hotkey/mainthread"
 )
